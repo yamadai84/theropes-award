@@ -143,55 +143,55 @@
       "表示": "TRUE",
       "名前": "HKR",
       "所属チーム": "alttype / HKR JUMPROPE CLUB",
-      "写真URL": ""
+      "写真URL": "assets/judges/hkr.jpg"
     },
     {
       "表示": "TRUE",
       "名前": "YUTTY",
       "所属チーム": "YUTTY KINGDOM.",
-      "写真URL": ""
+      "写真URL": "assets/judges/yutty.jpg"
     },
     {
       "表示": "TRUE",
       "名前": "KO-SUKE",
       "所属チーム": "THE ROPES",
-      "写真URL": ""
+      "写真URL": "assets/judges/ko-suke.jpg"
     },
     {
       "表示": "TRUE",
       "名前": "STR",
       "所属チーム": "NEWTRAD",
-      "写真URL": ""
+      "写真URL": "assets/judges/str.jpg"
     },
     {
       "表示": "TRUE",
       "名前": "Yosh a.k.a. YOSHIHIRO",
       "所属チーム": "YUTTY KINGDOM.",
-      "写真URL": ""
+      "写真URL": "assets/judges/yosh.jpg"
     },
     {
       "表示": "TRUE",
       "名前": "KEITA JUMPROCK",
       "所属チーム": "REG☆STYLE / Who is Respected!?",
-      "写真URL": ""
+      "写真URL": "assets/judges/keita-jumprock.jpg"
     },
     {
       "表示": "TRUE",
       "名前": "MAXIMA",
       "所属チーム": "NEWTRAD",
-      "写真URL": ""
+      "写真URL": "assets/judges/maxima.jpg"
     },
     {
       "表示": "TRUE",
       "名前": "イワネスインセイン",
       "所属チーム": "Dye you in my hue",
-      "写真URL": ""
+      "写真URL": "assets/judges/iwanes-insane.jpg"
     },
     {
       "表示": "TRUE",
       "名前": "AYUKA",
       "所属チーム": "FLY DIGGERZ",
-      "写真URL": ""
+      "写真URL": "assets/judges/ayuka.jpg"
     }
   ],
   "nominees": [],

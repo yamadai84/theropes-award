@@ -20,7 +20,10 @@
   }
 
   // Googleドライブの共有リンクは画像として直接表示できる形に直す
+  // サイト内の画像（assets/〜）もそのまま使える
   function imageUrl(url) {
+    const local = String(url || '').trim();
+    if (/^assets\/[\w\-./]+\.(jpe?g|png|webp|gif|svg)$/i.test(local) && !local.includes('..')) return local;
     const u = safeUrl(url);
     const m = u.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:.*&)?id=|thumbnail\?(?:.*&)?id=)([\w-]+)/);
     return m ? `https://lh3.googleusercontent.com/d/${m[1]}=w600` : u;
