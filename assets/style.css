@@ -187,6 +187,7 @@ strong { color: var(--gold-light); font-weight: 700; }
 .nominee-event { margin: 4px 0 0; color: var(--gold-light); font-size: 13px; line-height: 1.7; }
 .nominee-note { margin: 8px 0 0; color: var(--muted); font-size: 13px; line-height: 1.8; }
 .nominee-media { margin-top: 16px; }
+.nominee-media .video { margin: 0; }
 .nominee-media .instagram-media { min-width: 0 !important; width: 100% !important; margin: 0 !important; }
 
 /* ---------- ボタン ---------- */

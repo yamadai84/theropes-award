@@ -34,9 +34,27 @@
     return m ? m[1] : '';
   }
 
+  // YouTube の t=81s / t=1m21s / t=274 / start=274 を秒にする
+  function youtubeStart(url) {
+    const m = safeUrl(url).match(/[?&#](?:t|start)=([\dhms]+)/);
+    if (!m) return 0;
+    if (/^\d+$/.test(m[1])) return Number(m[1]);
+    const part = u => Number((m[1].match(new RegExp(`(\\d+)${u}`)) || [0, 0])[1]);
+    return part('h') * 3600 + part('m') * 60 + part('s');
+  }
+
   function instagramUrl(url) {
     const m = safeUrl(url).match(/^https?:\/\/(?:www\.)?instagram\.com\/(?:[\w.]+\/)?(p|reel|reels|tv)\/([\w-]+)/i);
     return m ? `https://www.instagram.com/${m[1].toLowerCase() === 'reels' ? 'reel' : m[1].toLowerCase()}/${m[2]}/` : '';
+  }
+
+  // 動画URL（YouTube かインスタ）。旧列名 InstagramURL も読む
+  function video(r) {
+    const url = r['動画URL'] || r['InstagramURL'] || '';
+    const yt = youtubeId(url);
+    if (yt) return { kind: 'yt', id: yt, start: youtubeStart(url), href: `https://www.youtube.com/watch?v=${yt}${youtubeStart(url) ? `&t=${youtubeStart(url)}s` : ''}` };
+    const ig = instagramUrl(url);
+    return ig ? { kind: 'ig', href: ig } : null;
   }
 
   const head = (en, ja) => `<div class="sec-head">
@@ -120,7 +138,7 @@
   // 受賞者（「受賞者」タブに入れると出る。空のあいだはゾーンごと出さない）
   function winnerCard(r) {
     const photo = imageUrl(r['写真URL']);
-    const ig = instagramUrl(r['InstagramURL']);
+    const v = video(r);
     const initial = esc(String(r['名前'] || '?').trim().charAt(0).toUpperCase());
     return `<li class="winner">
       <p class="winner-award">${esc(r['賞'])}</p>
@@ -130,7 +148,7 @@
       <p class="winner-name">${esc(r['名前'])}</p>
       ${r['所属・大会名'] ? `<p class="winner-sub">${rich(r['所属・大会名'])}</p>` : ''}
       ${r['コメント'] ? `<p class="winner-note">${rich(r['コメント'])}</p>` : ''}
-      ${ig ? `<a class="winner-link" href="${esc(ig)}" target="_blank" rel="noopener">受賞ムーブを見る →</a>` : ''}
+      ${v ? `<a class="winner-link" href="${esc(v.href)}" target="_blank" rel="noopener">受賞ムーブを見る →</a>` : ''}
     </li>`;
   }
 
@@ -186,15 +204,15 @@
   }
 
   function nomineeCard(r) {
-    const ig = instagramUrl(r['InstagramURL']);
+    const v = video(r);
     const winner = on(r['受賞']);
     return `<li class="nominee${winner ? ' is-winner' : ''}">
       ${winner ? `<span class="winner-badge">受賞</span>` : ''}
       <p class="nominee-name">${esc(r['名前'] || '—')}</p>
       ${r['大会名'] ? `<p class="nominee-event">${esc(r['大会名'])}</p>` : ''}
       ${r['コメント'] ? `<p class="nominee-note">${rich(r['コメント'])}</p>` : ''}
-      ${ig ? `<div class="nominee-media" data-ig="${esc(ig)}">
-        <button type="button" class="btn btn-small js-ig">映像を見る<span class="btn-arrow" aria-hidden="true">▶</span></button>
+      ${v ? `<div class="nominee-media" ${v.kind === 'yt' ? `data-yt="${esc(v.id)}" data-start="${v.start}"` : `data-ig="${esc(v.href)}"`}>
+        <button type="button" class="btn btn-small js-video">映像を見る<span class="btn-arrow" aria-hidden="true">▶</span></button>
       </div>` : ''}
     </li>`;
   }
@@ -315,11 +333,18 @@
     return igScript;
   }
 
-  function bindInstagram(root) {
+  // 「映像を見る」を押したら、その場で YouTube（指定の秒から）かインスタを埋め込む
+  function bindVideos(root) {
     root.addEventListener('click', e => {
-      const button = e.target.closest('.js-ig');
+      const button = e.target.closest('.js-video');
       if (!button) return;
       const box = button.parentElement;
+      if (box.dataset.yt) {
+        const id = encodeURIComponent(box.dataset.yt);
+        const start = Number(box.dataset.start) || 0;
+        box.innerHTML = `<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1${start ? `&start=${start}` : ''}" title="ノミネート作品の映像" allow="autoplay; encrypted-media; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`;
+        return;
+      }
       const url = box.dataset.ig;
       box.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${esc(url)}" data-instgrm-version="14"><a href="${esc(url)}" target="_blank" rel="noopener">Instagramで見る</a></blockquote>`;
       loadInstagram()
@@ -351,7 +376,7 @@
     ].join('');
     app.insertAdjacentHTML('afterend', footer(s));
     bindTabs(app);
-    bindInstagram(app);
+    bindVideos(app);
   }
 
   fetch(CONTENT_URL, { cache: 'no-cache' })
