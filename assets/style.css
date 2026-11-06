@@ -1,0 +1,251 @@
+:root {
+  --bg: #1c1b1a;
+  --bg-alt: #242221;
+  --surface: #2c2a28;
+  --line: #3d3a37;
+  --text: #ece8e1;
+  --muted: #a7a095;
+  --gold: #c19c32;
+  --gold-light: #e3c56a;
+  --gold-grad: linear-gradient(135deg, #a9851f 0%, #e3c56a 45%, #c19c32 60%, #8f6d17 100%);
+  --en: "Montserrat", "Noto Sans JP", sans-serif;
+  --serif: "Cormorant Garamond", serif;
+  --radius: 4px;
+  --head-h: 56px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: var(--head-h); -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 16px;
+  line-height: 1.9;
+  letter-spacing: .03em;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--gold-light); }
+strong { color: var(--gold-light); font-weight: 700; }
+[hidden] { display: none !important; }
+
+/* ---------- ヘッダー（THE ROPES本体と同じ、ロゴ左・メニュー右の細い帯） ---------- */
+.site-head {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  height: var(--head-h);
+  padding: 0 24px;
+  background: rgba(22, 21, 20, .92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+.site-brand { display: block; flex: none; }
+.site-brand img { height: 32px; width: auto; }
+.site-nav { display: flex; gap: 22px; overflow-x: auto; scrollbar-width: none; }
+.site-nav::-webkit-scrollbar { display: none; }
+.site-nav a {
+  color: var(--text); text-decoration: none; font-size: 13px; font-weight: 500; white-space: nowrap;
+  padding: 4px 0; border-bottom: 1px solid transparent; transition: color .2s, border-color .2s;
+}
+.site-nav a:hover { color: var(--gold-light); border-color: var(--gold); }
+
+/* ---------- ヒーロー ---------- */
+.hero {
+  position: relative; overflow: hidden;
+  text-align: center;
+  padding: 72px 24px 88px;
+  background: radial-gradient(ellipse at 50% 35%, #34302a 0%, var(--bg) 70%);
+  border-bottom: 1px solid var(--line);
+}
+.hero-glow {
+  position: absolute; inset: auto 0 0 0; height: 1px;
+  background: var(--gold-grad); opacity: .8;
+}
+.hero-logo { margin: 0 auto; width: min(340px, 72vw); }
+.hero-logo img { width: 100%; animation: rise 1s ease-out both; }
+.hero-catch { margin: 36px auto 0; max-width: 34em; font-size: clamp(15px, 2.4vw, 18px); font-weight: 700; line-height: 1.9; }
+.hero-sub { margin: 14px 0 0; color: var(--muted); font-size: 14px; }
+@keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .hero-logo img { animation: none; } }
+
+/* ---------- セクション共通（見出しは本体サイトの「日本語＋ – english –」の形） ---------- */
+.sec { padding: 88px 24px; }
+.sec-alt { background: var(--bg-alt); }
+.wrap { max-width: 1080px; margin: 0 auto; }
+.wrap-text { max-width: 760px; }
+.center { text-align: center; }
+.sec-head { text-align: center; margin-bottom: 44px; }
+.sec-ja { margin: 0; font-size: clamp(22px, 3.6vw, 28px); font-weight: 900; letter-spacing: .08em; line-height: 1.5; }
+.sec-en {
+  margin: 6px 0 0; color: var(--gold); font-family: var(--en); font-weight: 500; font-size: 13px;
+  letter-spacing: .2em; text-transform: uppercase;
+}
+.sec-head::after {
+  content: ""; display: block; width: 48px; height: 2px; margin: 18px auto 0; background: var(--gold-grad);
+}
+.lead { margin: 0 0 24px; font-size: 16px; line-height: 2.1; }
+.note-center { text-align: center; color: var(--muted); font-size: 14px; margin: -20px 0 36px; }
+.soon {
+  text-align: center; margin: 0; padding: 40px 16px;
+  color: var(--muted); font-family: var(--en); font-weight: 700; letter-spacing: .12em;
+  border: 1px dashed var(--line); border-radius: var(--radius);
+}
+.sub-head {
+  margin: 56px 0 24px; font-size: 18px; font-weight: 700;
+  padding-left: 14px; border-left: 3px solid var(--gold); line-height: 1.5;
+}
+
+/* ---------- 概要 ---------- */
+.facts { margin: 0; border-top: 1px solid var(--line); }
+.facts > div { display: grid; grid-template-columns: 9em 1fr; gap: 16px; padding: 16px 4px; border-bottom: 1px solid var(--line); }
+.facts dt { color: var(--gold-light); font-weight: 700; font-size: 14px; }
+.facts dd { margin: 0; font-size: 15px; }
+
+.flow { list-style: none; margin: 0; padding: 0; counter-reset: flow; }
+.flow li { position: relative; padding: 0 0 28px 36px; counter-increment: flow; }
+.flow li::before {
+  content: ""; position: absolute; left: 6px; top: 10px; width: 11px; height: 11px;
+  border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 4px rgba(193, 156, 50, .2);
+}
+.flow li:not(:last-child)::after { content: ""; position: absolute; left: 11px; top: 26px; bottom: 0; width: 1px; background: var(--line); }
+.flow-when { margin: 0; color: var(--gold); font-size: 13px; font-weight: 700; }
+.flow-title { margin: 2px 0 0; font-weight: 700; font-size: 16px; }
+.flow-body { margin: 6px 0 0; color: var(--muted); font-size: 14px; line-height: 1.9; }
+
+/* ---------- 賞 ---------- */
+.award-group + .award-group { margin-top: 56px; }
+.group-head { display: flex; align-items: center; gap: 16px; margin: 0 0 24px; font-size: 16px; font-weight: 700; color: var(--gold-light); }
+.group-head::before, .group-head::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.award-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+.award {
+  position: relative; padding: 26px 22px 24px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  transition: border-color .25s, transform .25s;
+}
+.award::before { content: ""; position: absolute; left: 0; top: 0; right: 0; height: 2px; background: var(--gold-grad); border-radius: var(--radius) var(--radius) 0 0; }
+.award:hover { border-color: var(--gold); transform: translateY(-2px); }
+.award-no { font-family: var(--serif); font-size: 26px; line-height: 1; color: var(--gold); }
+.award-name { margin: 12px 0 0; font-size: 18px; font-weight: 900; letter-spacing: .06em; line-height: 1.5; }
+.award-desc { margin: 10px 0 0; color: var(--muted); font-size: 13px; line-height: 1.8; }
+
+/* ---------- 受賞者 ---------- */
+.sec-winners { background: radial-gradient(ellipse at 50% 0%, #3a3328 0%, var(--bg) 60%); border-bottom: 1px solid var(--line); }
+.winner-period + .winner-period { margin-top: 64px; }
+.winner-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 44px 24px; }
+.winner { text-align: center; }
+.winner-award {
+  display: inline-block; margin: 0 0 14px; padding: 2px 16px; border-radius: 999px;
+  background: var(--gold-grad); color: #1c1b1a; font-weight: 900; font-size: 13px; letter-spacing: .06em; line-height: 1.9;
+}
+.winner-photo {
+  position: relative; aspect-ratio: 4 / 5; padding: 3px; border-radius: var(--radius);
+  background: var(--gold-grad); box-shadow: 0 14px 40px rgba(0, 0, 0, .45), 0 0 40px rgba(193, 156, 50, .12);
+}
+.winner-photo img, .winner-photo span { width: 100%; height: 100%; border-radius: 2px; object-fit: cover; }
+.winner-photo span { display: grid; place-items: center; background: var(--surface); font-family: var(--serif); font-size: 84px; color: var(--gold); }
+.winner-name { margin: 16px 0 0; font-size: 20px; font-weight: 900; letter-spacing: .04em; line-height: 1.5; }
+.winner-sub { margin: 4px 0 0; color: var(--gold-light); font-size: 13px; line-height: 1.7; }
+.winner-note { margin: 8px 0 0; color: var(--muted); font-size: 13px; line-height: 1.8; }
+.winner-link { display: inline-block; margin-top: 10px; font-size: 13px; color: var(--gold-light); }
+
+/* ---------- 選考委員 ---------- */
+.judge-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 36px 20px; }
+.judge { text-align: center; }
+.judge-photo {
+  width: 140px; aspect-ratio: 1; margin: 0 auto 14px; border-radius: 50%; overflow: hidden;
+  padding: 3px; background: var(--gold-grad);
+}
+.judge-photo img, .judge-photo span { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.judge-photo span {
+  display: grid; place-items: center; background: var(--surface);
+  font-family: var(--serif); font-size: 52px; color: var(--gold);
+}
+.judge-name { margin: 0; font-family: var(--en); font-weight: 700; font-size: 16px; letter-spacing: .04em; line-height: 1.5; }
+.judge-team { margin: 4px 0 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
+
+/* ---------- ノミネート ---------- */
+.tabs { display: flex; justify-content: center; gap: 0; margin: 0 auto 40px; width: fit-content; border: 1px solid var(--gold); border-radius: 999px; padding: 4px; }
+.tab {
+  appearance: none; border: 0; background: none; cursor: pointer;
+  color: var(--text); font: inherit; font-weight: 700; font-size: 15px; padding: 8px 32px; border-radius: 999px;
+  transition: background .2s, color .2s;
+}
+.tab[aria-selected="true"] { background: var(--gold-grad); color: #1c1b1a; }
+.tab:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
+.nom-group + .nom-group { margin-top: 48px; }
+.nom-award { margin: 0 0 18px; font-size: 18px; font-weight: 900; padding-left: 14px; border-left: 3px solid var(--gold); line-height: 1.4; }
+.nom-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; align-items: start; }
+.nominee { position: relative; padding: 22px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.nominee.is-winner { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold), 0 8px 30px rgba(193, 156, 50, .18); }
+.winner-badge {
+  position: absolute; top: -11px; right: 16px; padding: 2px 12px; border-radius: 999px;
+  background: var(--gold-grad); color: #1c1b1a; font-weight: 900; font-size: 12px; letter-spacing: .2em; line-height: 1.8;
+}
+.nominee-name { margin: 0; font-size: 18px; font-weight: 900; line-height: 1.5; }
+.nominee-event { margin: 4px 0 0; color: var(--gold-light); font-size: 13px; line-height: 1.7; }
+.nominee-note { margin: 8px 0 0; color: var(--muted); font-size: 13px; line-height: 1.8; }
+.nominee-media { margin-top: 16px; }
+.nominee-media .instagram-media { min-width: 0 !important; width: 100% !important; margin: 0 !important; }
+
+/* ---------- ボタン ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 12px 26px; border: 1px solid var(--gold); border-radius: 999px;
+  color: var(--text); background: transparent; text-decoration: none;
+  font: inherit; font-weight: 700; font-size: 14px; letter-spacing: .06em; cursor: pointer;
+  transition: background .2s, color .2s, transform .2s;
+}
+.btn:hover { background: rgba(193, 156, 50, .15); }
+.btn-arrow { transition: transform .2s; }
+.btn:hover .btn-arrow { transform: translateX(3px); }
+.btn-gold { background: var(--gold-grad); color: #1c1b1a; border: 0; }
+.btn-gold:hover { background: var(--gold-grad); transform: translateY(-1px); filter: brightness(1.08); }
+.btn-large { padding: 18px 40px; font-size: 16px; }
+.btn-small { padding: 8px 18px; font-size: 13px; }
+.btn-off { border-color: var(--line); color: var(--muted); cursor: default; }
+.btn-off:hover { background: none; }
+
+/* ---------- 公募・放送 ---------- */
+.deadline {
+  display: inline-block; margin: 0 0 32px; padding: 6px 18px;
+  border: 1px solid var(--line); border-radius: var(--radius); color: var(--gold-light); font-weight: 700; font-size: 14px;
+}
+.sec-stage { background: radial-gradient(ellipse at 50% 0%, #3a3328 0%, var(--bg) 65%); border-top: 1px solid var(--line); }
+.air-date {
+  margin: 0 0 24px; font-family: var(--en); font-weight: 800; font-size: clamp(26px, 5vw, 40px); line-height: 1.4;
+  background: var(--gold-grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.video { position: relative; aspect-ratio: 16 / 9; margin: 8px 0 28px; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: #000; }
+.video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+/* ---------- フッター ---------- */
+.site-foot { padding: 56px 24px 40px; text-align: center; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+.site-foot > img { width: 96px; margin: 0 auto 28px; opacity: .9; }
+.foot-brand { display: inline-block; margin-bottom: 12px; }
+.foot-brand img { height: 26px; width: auto; opacity: .85; }
+.site-foot p { margin: 4px 0; }
+.site-foot a { color: var(--muted); }
+.site-foot .copy { margin-top: 16px; font-family: var(--en); font-size: 11px; letter-spacing: .1em; }
+
+.loading { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 60vh; color: var(--muted); }
+.spinner { width: 22px; height: 22px; border: 2px solid var(--line); border-top-color: var(--gold); border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.noscript { text-align: center; padding: 40px 16px; }
+
+@media (max-width: 640px) {
+  .site-head { padding: 0 16px; gap: 12px; }
+  .site-brand img { height: 26px; }
+  .site-nav { gap: 16px; }
+  .sec { padding: 64px 16px; }
+  .hero { padding: 56px 16px 64px; }
+  .facts > div { grid-template-columns: 1fr; gap: 2px; padding: 14px 2px; }
+  .judge-grid { grid-template-columns: repeat(2, 1fr); gap: 28px 12px; }
+  .judge-photo { width: 116px; }
+  .winner-grid { grid-template-columns: repeat(2, 1fr); gap: 32px 12px; }
+  .winner-name { font-size: 16px; }
+  .winner-award { font-size: 11px; padding: 2px 10px; }
+  .winner-photo span { font-size: 56px; }
+  .tab { padding: 8px 24px; }
+  .btn-large { padding: 16px 28px; }
+}
