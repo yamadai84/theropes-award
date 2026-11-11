@@ -55,8 +55,17 @@ strong { color: var(--gold-light); font-weight: 700; }
   position: relative; overflow: hidden;
   text-align: center;
   padding: 72px 24px 88px;
-  background: radial-gradient(ellipse at 50% 35%, #34302a 0%, var(--bg) 70%);
+  background: var(--bg);
   border-bottom: 1px solid var(--line);
+  isolation: isolate;
+}
+/* ロゴの後ろの写真。金色トーンに加工済みの画像を、さらに暗い膜で沈めて文字を読みやすくする */
+.hero::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background:
+    radial-gradient(ellipse at 50% 42%, rgba(28, 27, 26, .35) 0%, rgba(28, 27, 26, .78) 62%, rgba(28, 27, 26, .96) 100%),
+    url("hero-bg.jpg") 50% 40% / cover no-repeat;
+  opacity: .9;
 }
 .hero-glow {
   position: absolute; inset: auto 0 0 0; height: 1px;
@@ -65,7 +74,8 @@ strong { color: var(--gold-light); font-weight: 700; }
 .hero-logo { margin: 0 auto; width: min(340px, 72vw); }
 .hero-logo img { width: 100%; animation: rise 1s ease-out both; }
 .hero-catch { margin: 36px auto 0; max-width: 34em; font-size: clamp(15px, 2.4vw, 18px); font-weight: 700; line-height: 1.9; }
-.hero-sub { margin: 14px 0 0; color: var(--muted); font-size: 14px; }
+.hero-sub { margin: 14px 0 0; color: #cfc8bc; font-size: 14px; }
+.hero-catch, .hero-sub { text-shadow: 0 2px 12px rgba(0, 0, 0, .7); }
 @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .hero-logo img { animation: none; } }
 
@@ -255,6 +265,9 @@ strong { color: var(--gold-light); font-weight: 700; }
   .site-nav { gap: 16px; }
   .sec { padding: 64px 16px; }
   .hero { padding: 56px 16px 64px; }
+  .hero::before { background:
+    radial-gradient(ellipse at 50% 38%, rgba(28, 27, 26, .4) 0%, rgba(28, 27, 26, .8) 65%, rgba(28, 27, 26, .96) 100%),
+    url("hero-bg-sp.jpg") 50% 30% / cover no-repeat; }
   .facts > div { grid-template-columns: 1fr; gap: 2px; padding: 14px 2px; }
   .judge-grid { grid-template-columns: repeat(2, 1fr); gap: 32px 12px; }
   .award-grid { grid-template-columns: repeat(2, 1fr); column-gap: 14px; }
