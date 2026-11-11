@@ -114,20 +114,21 @@ strong { color: var(--gold-light); font-weight: 700; }
 .flow-body { margin: 6px 0 0; color: var(--muted); font-size: 14px; line-height: 1.9; }
 
 /* ---------- 賞 ---------- */
-.award-group + .award-group { margin-top: 56px; }
+.award-group + .award-group { margin-top: 40px; }
 .group-head { display: flex; align-items: center; gap: 16px; margin: 0 0 24px; font-size: 16px; font-weight: 700; color: var(--gold-light); }
 .group-head::before, .group-head::after { content: ""; flex: 1; height: 1px; background: var(--line); }
-.award-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
-.award {
-  position: relative; padding: 26px 22px 24px;
-  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-  transition: border-color .25s, transform .25s;
+.award-grid {
+  list-style: none; margin: 0 auto; padding: 0; max-width: 960px;
+  display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 32px;
+  border-top: 1px solid var(--line);
 }
-.award::before { content: ""; position: absolute; left: 0; top: 0; right: 0; height: 2px; background: var(--gold-grad); border-radius: var(--radius) var(--radius) 0 0; }
-.award:hover { border-color: var(--gold); transform: translateY(-2px); }
-.award-no { font-family: var(--serif); font-size: 26px; line-height: 1; color: var(--gold); }
-.award-name { margin: 12px 0 0; font-size: 18px; font-weight: 900; letter-spacing: .06em; line-height: 1.5; }
-.award-desc { margin: 10px 0 0; color: var(--muted); font-size: 13px; line-height: 1.8; }
+.award {
+  display: grid; grid-template-columns: auto 1fr; align-items: baseline; column-gap: 14px;
+  padding: 14px 4px; border-bottom: 1px solid var(--line);
+}
+.award-no { font-family: var(--serif); font-size: 20px; line-height: 1; color: var(--gold); }
+.award-name { margin: 0; font-size: 16px; font-weight: 900; letter-spacing: .04em; line-height: 1.5; }
+.award-desc { grid-column: 2; margin: 2px 0 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
 
 /* ---------- 受賞者 ---------- */
 .sec-winners { background: radial-gradient(ellipse at 50% 0%, #3a3328 0%, var(--bg) 60%); border-bottom: 1px solid var(--line); }
@@ -210,9 +211,18 @@ strong { color: var(--gold-light); font-weight: 700; }
 
 /* ---------- 公募・放送 ---------- */
 .deadline {
-  display: inline-block; margin: 0 0 32px; padding: 6px 18px;
+  display: inline-block; margin: 0 0 20px; padding: 6px 18px;
   border: 1px solid var(--line); border-radius: var(--radius); color: var(--gold-light); font-weight: 700; font-size: 14px;
 }
+.period {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 14px;
+  margin: 8px auto 20px; font-weight: 700; font-size: 17px; line-height: 1.6;
+}
+.period-label {
+  padding: 2px 12px; border: 1px solid var(--gold); border-radius: 999px;
+  color: var(--gold-light); font-size: 12px; letter-spacing: .1em;
+}
+.entry-action { margin-top: 12px; }
 .sec-stage { background: radial-gradient(ellipse at 50% 0%, #3a3328 0%, var(--bg) 65%); border-top: 1px solid var(--line); }
 .air-date {
   margin: 0 0 24px; font-family: var(--en); font-weight: 800; font-size: clamp(26px, 5vw, 40px); line-height: 1.4;
@@ -235,6 +245,10 @@ strong { color: var(--gold-light); font-weight: 700; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .noscript { text-align: center; padding: 40px 16px; }
 
+@media (max-width: 860px) and (min-width: 641px) {
+  .award-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
 @media (max-width: 640px) {
   .site-head { padding: 0 16px; gap: 12px; }
   .site-brand img { height: 26px; }
@@ -243,6 +257,10 @@ strong { color: var(--gold-light); font-weight: 700; }
   .hero { padding: 56px 16px 64px; }
   .facts > div { grid-template-columns: 1fr; gap: 2px; padding: 14px 2px; }
   .judge-grid { grid-template-columns: repeat(2, 1fr); gap: 32px 12px; }
+  .award-grid { grid-template-columns: repeat(2, 1fr); column-gap: 14px; }
+  .award { column-gap: 6px; padding: 12px 0; }
+  .award-no { font-size: 15px; }
+  .award-name { font-size: 12px; letter-spacing: 0; }
   .winner-grid { grid-template-columns: repeat(2, 1fr); gap: 32px 12px; }
   .winner-name { font-size: 16px; }
   .winner-award { font-size: 11px; padding: 2px 10px; }

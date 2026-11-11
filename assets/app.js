@@ -256,15 +256,55 @@
     </section>`;
   }
 
+  // 「2026/06/30」「2026/6/30 23:59」「2026年6月30日 18:00」などを日本時間として読む。
+  // 時刻がなければ、開始はその日の 0:00、終了はその日の 23:59 とみなす
+  function parseJst(text, endOfDay) {
+    const m = String(text || '').match(/(\d{4})\s*[\/\-.年]\s*(\d{1,2})\s*[\/\-.月]\s*(\d{1,2})\s*日?(?:\s*[（(][^）)]*[）)])?(?:\s*(\d{1,2})\s*[:：時]\s*(\d{1,2})?)?/);
+    if (!m) return null;
+    const hasTime = m[4] != null;
+    const h = hasTime ? Number(m[4]) : (endOfDay ? 23 : 0);
+    const min = hasTime ? Number(m[5] || 0) : (endOfDay ? 59 : 0);
+    const date = new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]), h - 9, min, endOfDay && !hasTime ? 59 : 0));
+    return { date, hasTime };
+  }
+
+  function formatJst(p, withYear) {
+    const d = new Date(p.date.getTime() + 9 * 3600 * 1000);
+    const wd = '日月火水木金土'[d.getUTCDay()];
+    const time = p.hasTime ? ` ${d.getUTCHours()}:${String(d.getUTCMinutes()).padStart(2, '0')}` : '';
+    return `${withYear ? `${d.getUTCFullYear()}年` : ''}${d.getUTCMonth() + 1}月${d.getUTCDate()}日(${wd})${time}`;
+  }
+
   function entry(s) {
     const form = safeUrl(s['公募フォームURL']);
+    const start = parseJst(s['公募開始'], false);
+    const end = parseJst(s['公募終了'], true);
+    const now = Date.now();
+    const before = start && now < start.date.getTime();
+    const after = end && now > end.date.getTime();
+    const sameYear = start && end && start.date.getUTCFullYear() === end.date.getUTCFullYear();
+
+    let period = '';
+    if (start || end) {
+      const from = start ? formatJst(start, true) : '';
+      const to = end ? formatJst(end, !sameYear) : '';
+      period = `<p class="period"><span class="period-label">募集期間</span>${esc(from)}${from ? ' 〜 ' : ''}${esc(to)}${end && (!end.hasTime || !from) ? ' まで' : ''}</p>`;
+    }
+    let action;
+    if (!form || after) {
+      action = `<p class="btn btn-off">${esc(s['公募終了の文言'] || '公募は終了しました')}</p>`;
+    } else if (before) {
+      action = `<p class="btn btn-off">${esc(`${formatJst(start, false)}から受付開始`)}</p>`;
+    } else {
+      action = btn(form, s['公募ボタンの文言'] || '公募フォームから応募する', 'btn-gold btn-large');
+    }
     return `<section class="sec sec-alt" id="entry">
       <div class="wrap wrap-text center">
         ${head('Entry', '公募フォーム')}
         ${s['公募の説明'] ? `<p class="lead">${rich(s['公募の説明'])}</p>` : ''}
-        ${s['公募の締切'] ? `<p class="deadline">${rich(s['公募の締切'])}</p>` : ''}
-        ${form ? btn(form, s['公募ボタンの文言'] || '公募フォームから応募する', 'btn-gold btn-large')
-          : `<p class="btn btn-off">${esc(s['公募終了の文言'] || '公募は終了しました')}</p>`}
+        ${period}
+        ${s['公募の締切'] && !after ? `<p class="deadline">${rich(s['公募の締切'])}</p>` : ''}
+        <div class="entry-action">${action}</div>
       </div>
     </section>`;
   }
