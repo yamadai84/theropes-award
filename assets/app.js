@@ -115,12 +115,11 @@
     return groups;
   }
 
-  function awards(s, rows, split) {
+  function awards(s, rows) {
     const soon = `<p class="soon">${esc(s['賞の準備中の文言'] || '各賞のラインナップは後日発表')}</p>`;
     return `<section class="sec" id="awards">
       <div class="wrap">
         ${head('Awards', '賞の一覧')}
-        ${split ? `<p class="note-center">各賞は<strong>上半期・下半期</strong>それぞれで選出します</p>` : ''}
         ${rows.length ? groupBy(rows, '部門').map(g => `<div class="award-group">
           ${g.key ? `<h3 class="group-head"><span>${esc(g.key)}</span></h3>` : ''}
           <ol class="award-grid">
@@ -152,31 +151,19 @@
     </li>`;
   }
 
-  function winners(s, rows, awardRows, split) {
+  // 賞は通年で1つずつ。上半期・下半期で分けるのはノミネートの発表だけ
+  function winners(s, rows, awardRows) {
     if (!rows.length) return '';
     const order = awardRows.map(r => r['賞名']);
     const sorted = rows.slice().sort((a, b) => {
       const ia = order.indexOf(a['賞']), ib = order.indexOf(b['賞']);
       return (ia < 0 ? 999 : ia) - (ib < 0 ? 999 : ib);
     });
-    const grid = list => `<ul class="winner-grid">${list.map(winnerCard).join('')}</ul>`;
-    let body;
-    if (split) {
-      body = PERIODS.concat([''])
-        .map(p => ({ p, list: sorted.filter(r => (r['期'] || '') === p) }))
-        .filter(x => x.list.length)
-        .map(x => `<div class="winner-period">
-          ${x.p ? `<h3 class="group-head"><span>${esc(x.p)}</span></h3>` : ''}
-          ${grid(x.list)}
-        </div>`).join('');
-    } else {
-      body = grid(sorted);
-    }
     return `<section class="sec sec-winners" id="winners">
       <div class="wrap">
         ${head('Winners', '受賞者')}
         ${s['受賞者の説明'] ? `<p class="note-center">${rich(s['受賞者の説明'])}</p>` : ''}
-        ${body}
+        <ul class="winner-grid">${sorted.map(winnerCard).join('')}</ul>
       </div>
     </section>`;
   }
@@ -405,10 +392,10 @@
     }
     app.innerHTML = [
       hero(s),
-      winners(s, winnerRows, awardRows, split),
+      winners(s, winnerRows, awardRows),
       about(s),
       outline(shown(data.outline), shown(data.flow)),
-      awards(s, awardRows, split),
+      awards(s, awardRows),
       judges(s, shown(data.judges)),
       nominees(s, shown(data.nominees), awardRows, split),
       entry(s),
