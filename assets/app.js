@@ -296,18 +296,31 @@
     </section>`;
   }
 
-  function broadcast(s) {
-    const vid = youtubeId(s['放送URL']);
-    const channel = safeUrl(s['YouTubeチャンネルURL']);
-    const date = s['放送日'] || '後日発表';
-    return `<section class="sec sec-stage" id="broadcast">
+  // 結果発表（THE ROPES ウェブサイトで発表）。
+  // 発表ページURL が入ればそのページへのボタン（YouTube なら動画を埋め込む）。空のあいだは THE ROPES のサイトへ
+  function announce(s) {
+    const url = safeUrl(s['発表ページURL']);
+    const vid = youtubeId(url);
+    const date = s['発表日'] || '後日発表';
+    let action;
+    if (vid) {
+      action = `<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/${vid}" title="${esc(s['タイトル'] || 'THE ROPES AWARD')}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`;
+    } else if (url) {
+      action = btn(url, s['発表ボタンの文言'] || '結果発表を見る', 'btn-gold btn-large');
+    } else {
+      action = btn('https://theropes.jp/', 'THE ROPES ウェブサイト');
+    }
+    const notice = s['お知らせ本文'] ? `<div class="notice">
+        ${s['お知らせ見出し'] ? `<p class="notice-title">${esc(s['お知らせ見出し'])}</p>` : ''}
+        <p class="notice-body">${rich(s['お知らせ本文'])}</p>
+      </div>` : '';
+    return `<section class="sec sec-stage" id="announce">
       <div class="wrap wrap-text center">
-        ${head('Broadcast', `AWARD ${s['年度'] || ''} 放送日`)}
+        ${head('Announcement', `AWARD ${s['年度'] || ''} 結果発表`)}
         <p class="air-date">${esc(date)}</p>
-        ${s['放送の説明'] ? `<p class="lead">${rich(s['放送の説明'])}</p>` : ''}
-        ${vid ? `<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/${vid}" title="${esc(s['タイトル'] || 'THE ROPES AWARD')}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-          ${btn(`https://www.youtube.com/watch?v=${vid}`, 'YouTubeで見る', 'btn-gold')}`
-          : (channel ? btn(channel, s['チャンネルボタンの文言'] || 'THE ROPES YouTubeチャンネル', 'btn-gold') : '')}
+        ${s['発表の説明'] ? `<p class="lead">${rich(s['発表の説明'])}</p>` : ''}
+        ${action}
+        ${notice}
       </div>
     </section>`;
   }
@@ -399,7 +412,7 @@
       judges(s, shown(data.judges)),
       nominees(s, shown(data.nominees), awardRows, split),
       entry(s),
-      broadcast(s),
+      announce(s),
     ].join('');
     app.insertAdjacentHTML('afterend', footer(s));
     bindTabs(app);

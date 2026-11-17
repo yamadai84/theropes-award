@@ -237,6 +237,13 @@ strong { color: var(--gold-light); font-weight: 700; }
   margin: 0 0 24px; font-family: var(--en); font-weight: 800; font-size: clamp(26px, 5vw, 40px); line-height: 1.4;
   background: var(--gold-grad); -webkit-background-clip: text; background-clip: text; color: transparent;
 }
+.notice {
+  margin: 48px auto 0; padding: 22px 24px; max-width: 640px; text-align: left;
+  border: 1px solid var(--line); border-left: 3px solid var(--gold); border-radius: var(--radius);
+  background: rgba(36, 34, 33, .7);
+}
+.notice-title { margin: 0 0 10px; font-weight: 700; font-size: 15px; color: var(--gold-light); }
+.notice-body { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.95; }
 .video { position: relative; aspect-ratio: 16 / 9; margin: 8px 0 28px; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: #000; }
 .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
